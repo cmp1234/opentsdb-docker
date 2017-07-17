@@ -9,7 +9,7 @@ RUN apk --update add \
     --update-cache \
     --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
 
-ENV TSDB_VERSION 2.2.0
+ENV TSDB_VERSION 2.2.2
 ENV HBASE_VERSION 1.1.3
 
 RUN mkdir -p /opt/bin/
