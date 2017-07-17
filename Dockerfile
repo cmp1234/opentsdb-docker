@@ -1,9 +1,7 @@
-FROM janeczku/alpine-kubernetes:3.2
+FROM cmp1234/java:8u131-jre-alpine
 
 RUN apk --update add \
-    rsyslog \
     bash \
-    openjdk7 \
     make \
     wget \
   && : adding gnuplot for graphing \
@@ -13,8 +11,6 @@ RUN apk --update add \
 
 ENV TSDB_VERSION 2.2.0
 ENV HBASE_VERSION 1.1.3
-ENV JAVA_HOME /usr/lib/jvm/java-1.7-openjdk
-ENV PATH $PATH:/usr/lib/jvm/java-1.7-openjdk/bin/
 
 RUN mkdir -p /opt/bin/
 
