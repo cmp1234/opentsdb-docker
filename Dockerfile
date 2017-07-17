@@ -17,12 +17,15 @@ RUN mkdir -p /opt/bin/
 RUN mkdir /opt/opentsdb/
 WORKDIR /opt/opentsdb/
 RUN apk --update add --virtual builddeps \
+    openjdk8 \
     build-base \
     autoconf \
     automake \
     git \
     python \
   && : Install OpenTSDB and scripts \
+  && export JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk \
+  && export PATH=$PATH:/usr/lib/jvm/java-1.8-openjdk/bin/ \
   && wget --no-check-certificate \
     -O v${TSDB_VERSION}.zip \
     https://github.com/OpenTSDB/opentsdb/archive/v${TSDB_VERSION}.zip \
