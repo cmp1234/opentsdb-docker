@@ -1,4 +1,4 @@
-FROM cmp1234/java:8u131-jre-alpine
+FROM cmp1234/java:8u131-jre-alpine3.6
 
 RUN apk --update add \
     bash \
