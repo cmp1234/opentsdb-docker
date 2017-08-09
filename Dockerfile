@@ -36,7 +36,7 @@ RUN mkdir -p /opt/bin/ && mkdir /opt/opentsdb/ \
   && : cd / \
   && : rm -rf /opt/opentsdb/opentsdb-${TSDB_VERSION} \
   && apk del builddeps \
-  && rm -rf /var/cache/apk/*
+  && rm -rf /var/cache/apk/* \
   && ln -s /usr/local/bin/bash /bin/bash
 
 #Install HBase and scripts
