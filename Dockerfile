@@ -3,9 +3,10 @@ FROM cmp1234/jre-su-exec:security-latest-alpine3.6
 ENV TSDB_VERSION 2.2.2
 ENV HBASE_VERSION 1.3.0
 
+RUN mkdir -p /opt/bin/ && mkdir /opt/opentsdb/ 
+
 WORKDIR /opt/opentsdb/
-RUN mkdir -p /opt/bin/ && mkdir /opt/opentsdb/ \
-  &&  apk --update add --virtual builddeps \
+RUN apk --update add --virtual builddeps \
       bash \
       make \
       wget \
