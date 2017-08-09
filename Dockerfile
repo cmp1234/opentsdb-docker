@@ -1,28 +1,23 @@
-FROM cmp1234/java:8u131-jre-alpine3.6
-
-RUN apk --update add \
-    bash \
-    make \
-    wget \
-  && : adding gnuplot for graphing \
-  && apk add gnuplot \
-    --update-cache \
-    --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
+FROM cmp1234/jre-su-exec:security-latest-alpine3.6
 
 ENV TSDB_VERSION 2.2.2
 ENV HBASE_VERSION 1.3.0
 
-RUN mkdir -p /opt/bin/
-
-RUN mkdir /opt/opentsdb/
 WORKDIR /opt/opentsdb/
-RUN apk --update add --virtual builddeps \
-    openjdk8 \
-    build-base \
-    autoconf \
-    automake \
-    git \
-    python \
+RUN mkdir -p /opt/bin/ && mkdir /opt/opentsdb/ \
+  &&  apk --update add --virtual builddeps \
+      bash \
+      make \
+      wget \
+      openjdk8 \
+      build-base \
+      autoconf \
+      automake \
+      git \
+      python \
+  && apk add gnuplot \
+    --update-cache \
+    --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
   && : Install OpenTSDB and scripts \
   && export JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk \
   && export PATH=$PATH:/usr/lib/jvm/java-1.8-openjdk/bin/ \
@@ -42,12 +37,13 @@ RUN apk --update add --virtual builddeps \
   && : rm -rf /opt/opentsdb/opentsdb-${TSDB_VERSION} \
   && apk del builddeps \
   && rm -rf /var/cache/apk/*
+  && ln -s /usr/local/bin/bash /bin/bash
 
 #Install HBase and scripts
-RUN mkdir -p /data/hbase /root/.profile.d /opt/downloads
 
 WORKDIR /opt/downloads
-RUN wget -O hbase-${HBASE_VERSION}.bin.tar.gz http://archive.apache.org/dist/hbase/${HBASE_VERSION}/hbase-${HBASE_VERSION}-bin.tar.gz && \
+RUN mkdir -p /data/hbase /root/.profile.d /opt/downloads && \
+    wget -O hbase-${HBASE_VERSION}.bin.tar.gz http://archive.apache.org/dist/hbase/${HBASE_VERSION}/hbase-${HBASE_VERSION}-bin.tar.gz && \
     tar xzvf hbase-${HBASE_VERSION}.bin.tar.gz && \
     mv hbase-${HBASE_VERSION} /opt/hbase && \
     rm hbase-${HBASE_VERSION}.bin.tar.gz
@@ -63,9 +59,9 @@ RUN for i in /opt/bin/start_hbase.sh /opt/bin/start_opentsdb.sh /opt/bin/create_
     done
 
 
-RUN mkdir -p /etc/services.d/hbase /etc/services.d/tsdb
-RUN ln -s /opt/bin/start_hbase.sh /etc/services.d/hbase/run
-RUN ln -s /opt/bin/start_opentsdb.sh /etc/services.d/tsdb/run
+RUN mkdir -p /etc/services.d/hbase /etc/services.d/tsdb \
+    && ln -s /opt/bin/start_hbase.sh /etc/services.d/hbase/run \
+    && ln -s /opt/bin/start_opentsdb.sh /etc/services.d/tsdb/run
 
 EXPOSE 60000 60010 60030 4242 16010
 
