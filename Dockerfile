@@ -5,6 +5,8 @@ ENV HBASE_VERSION 1.3.0
 
 RUN mkdir -p /opt/bin/ && mkdir /opt/opentsdb/ 
 
+RUN apk --update add make 
+
 WORKDIR /opt/opentsdb/
 RUN apk --update add --virtual builddeps \
       bash \
